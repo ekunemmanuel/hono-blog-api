@@ -1,111 +1,88 @@
-# Hono Open API Starter
+# Hono Blog API
 
-A starter template for building fully documented type-safe JSON APIs with Hono and Open API.
+A modern, type-safe blog API built with Hono, OpenAPI, and Prisma.
 
-> A new version of drizzle was released since the video showing this starter was made. See the [drizzle-v0.35 branch](https://github.com/w3cj/hono-open-api-starter/tree/drizzle-v0.35) and [this commit](https://github.com/w3cj/hono-open-api-starter/commit/92525ff84fb2a247c8245cc889b2320d7b3b6e2c) for the changes required to use drizzle v0.35
+## Features
 
-> For a cloudflare specific template, see the [cloudflare branch](https://github.com/w3cj/hono-open-api-starter/tree/cloudflare) on this repo and the [cloudflare-drizzle-v0.35 branch](https://github.com/w3cj/hono-open-api-starter/tree/cloudflare-drizzle-v0.35)
+- 🚀 Built with [Hono](https://hono.dev/) for high-performance routing
+- 📝 Type-safe API documentation with [@hono/zod-openapi](https://github.com/honojs/middleware/tree/main/packages/zod-openapi)
+- 📚 Interactive API documentation with [@scalar/hono-api-reference](https://github.com/scalar/scalar/tree/main/packages/hono-api-reference)
+- 📊 Database management with [Prisma](https://www.prisma.io/)
+- 🔍 Structured logging with [pino](https://getpino.io/) / [hono-pino](https://www.npmjs.com/package/hono-pino)
+- ✨ Type-safe schemas and environment variables with [zod](https://zod.dev/)
+- 🧪 Testing with [vitest](https://vitest.dev/)
+- 🎨 Code formatting and linting with [@antfu/eslint-config](https://github.com/antfu/eslint-config)
 
-> For other deployment examples see the [hono-node-deployment-examples](https://github.com/w3cj/hono-node-deployment-examples) repo
+## Prerequisites
 
-- [Hono Open API Starter](#hono-open-api-starter)
-  - [Included](#included)
-  - [Setup](#setup)
-  - [Code Tour](#code-tour)
-  - [Endpoints](#endpoints)
-  - [References](#references)
-
-## Included
-
-- Structured logging with [pino](https://getpino.io/) / [hono-pino](https://www.npmjs.com/package/hono-pino)
-- Documented / type-safe routes with [@hono/zod-openapi](https://github.com/honojs/middleware/tree/main/packages/zod-openapi)
-- Interactive API documentation with [scalar](https://scalar.com/#api-docs) / [@scalar/hono-api-reference](https://github.com/scalar/scalar/tree/main/packages/hono-api-reference)
-- Convenience methods / helpers to reduce boilerplate with [stoker](https://www.npmjs.com/package/stoker)
-- Type-safe schemas and environment variables with [zod](https://zod.dev/)
-- Single source of truth database schemas with [drizzle](https://orm.drizzle.team/docs/overview) and [drizzle-zod](https://orm.drizzle.team/docs/zod)
-- Testing with [vitest](https://vitest.dev/)
-- Sensible editor, formatting and linting settings with [@antfu/eslint-config](https://github.com/antfu/eslint-config)
+- Node.js (v18 or higher)
+- Bun (for development)
+- A database (configured in your .env file)
 
 ## Setup
 
-Clone this template without git history
-
-```sh
-npx degit w3cj/hono-open-api-starter my-api
-cd my-api
+1. Clone the repository:
+```bash
+git clone https://github.com/ekunemmanuel/hono-blog-api.git
+cd hono-blog-api
 ```
 
-Create `.env` file
+2. Install dependencies:
+```bash
+bun install
+```
 
-```sh
+3. Set up your environment variables:
+```bash
 cp .env.example .env
 ```
+Edit the `.env` file with your database credentials and other configuration.
 
-Install dependencies
-
-```sh
-pnpm install
+4. Set up the database:
+```bash
+bunx prisma generate
+bunx prisma db push
 ```
 
-Create sqlite db / push schema
+## Development
 
-```sh
-pnpm drizzle-kit push
+Start the development server:
+```bash
+bun run dev
 ```
 
-Run
+The API will be available at `http://localhost:3000`
 
-```sh
-pnpm dev
+## Available Scripts
+
+- `bun run dev` - Start development server
+- `bun run build` - Build the project
+- `bun run start` - Start production server
+- `bun run test` - Run tests
+- `bun run lint` - Run linter
+- `bun run lint:fix` - Fix linting issues
+- `bun run typecheck` - Run TypeScript type checking
+
+## API Documentation
+
+- OpenAPI Specification: `http://localhost:3000/doc`
+- Interactive API Documentation: `http://localhost:3000/reference`
+
+## Project Structure
+
+```
+src/
+├── app.ts              # Main application setup
+├── index.ts           # Application entry point
+├── env.ts             # Environment configuration
+├── db/                # Database configuration
+├── lib/               # Shared utilities
+├── middlewares/       # Custom middleware
+└── routes/            # API routes
+    ├── articles/      # Article-related endpoints
+    └── index.route.ts # Route configuration
 ```
 
-Lint
+## License
 
-```sh
-pnpm lint
-```
-
-Test
-
-```sh
-pnpm test
-```
-
-## Code Tour
-
-Base hono app exported from [app.ts](./src/app.ts). Local development uses [@hono/node-server](https://hono.dev/docs/getting-started/nodejs) defined in [index.ts](./src/index.ts) - update this file or create a new entry point to use your preferred runtime.
-
-Typesafe env defined in [env.ts](./src/env.ts) - add any other required environment variables here. The application will not start if any required environment variables are missing
-
-See [src/routes/tasks](./src/routes/tasks/) for an example Open API group. Copy this folder / use as an example for your route groups.
-
-- Router created in [tasks.index.ts](./src/routes/tasks/tasks.index.ts)
-- Route definitions defined in [tasks.routes.ts](./src/routes/tasks/tasks.routes.ts)
-- Hono request handlers defined in [tasks.handlers.ts](./src/routes/tasks/tasks.handlers.ts)
-- Group unit tests defined in [tasks.test.ts](./src/routes/tasks/tasks.test.ts)
-
-All app routes are grouped together and exported into single type as `AppType` in [app.ts](./src/app.ts) for use in [RPC / hono/client](https://hono.dev/docs/guides/rpc).
-
-## Endpoints
-
-| Path               | Description              |
-| ------------------ | ------------------------ |
-| GET /doc           | Open API Specification   |
-| GET /reference     | Scalar API Documentation |
-| GET /tasks         | List all tasks           |
-| POST /tasks        | Create a task            |
-| GET /tasks/{id}    | Get one task by id       |
-| PATCH /tasks/{id}  | Patch one task by id     |
-| DELETE /tasks/{id} | Delete one task by id    |
-
-## References
-
-- [What is Open API?](https://swagger.io/docs/specification/v3_0/about/)
-- [Hono](https://hono.dev/)
-  - [Zod OpenAPI Example](https://hono.dev/examples/zod-openapi)
-  - [Testing](https://hono.dev/docs/guides/testing)
-  - [Testing Helper](https://hono.dev/docs/helpers/testing)
-- [@hono/zod-openapi](https://github.com/honojs/middleware/tree/main/packages/zod-openapi)
-- [Scalar Documentation](https://github.com/scalar/scalar/tree/main/?tab=readme-ov-file#documentation)
-  - [Themes / Layout](https://github.com/scalar/scalar/blob/main/documentation/themes.md)
-  - [Configuration](https://github.com/scalar/scalar/blob/main/documentation/configuration.md)
+MIT
