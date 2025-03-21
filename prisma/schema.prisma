@@ -15,8 +15,8 @@ model Article {
     title           String      
     description     String?
     content         String
-    publishingDate  DateTime
-    tags            String[]  @default([])
+    publishedAt     DateTime?
+    tags            String[]    @default([])
     isDraft         Boolean     @default(false)
     createdAt       DateTime    @default(now())
     updatedAt       DateTime    @updatedAt
